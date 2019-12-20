@@ -18,9 +18,11 @@ from django.urls import path
 from rest_framework.authtoken.views import obtain_auth_token
 
 from tours.views import TourView
+from employees.views import ApprovingManagerView
 
 urlpatterns = [
     path("admin/", admin.site.urls),
     path("api-token-auth/", obtain_auth_token, name="api_token_auth"),
-    path("tours/", TourView.as_view(), name="tours")
+    path("tours/", TourView.as_view(), name="tours"),
+    path("approving_managers/", ApprovingManagerView.as_view(), name="approving_managers")
 ]
