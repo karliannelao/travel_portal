@@ -11,7 +11,7 @@ class CustomObtainAuthToken(ObtainAuthToken):
     def post(self, request, *args, **kwargs):
         response = super(CustomObtainAuthToken, self).post(request, *args, **kwargs)
         token = Token.objects.get(key=response.data['token'])
-        return Response({'token': token.key, 'id': token.user_id, 'username': token.user.username})
+        return Response({'token': token.key, 'id': token.user_id, 'username': token.user.username, 'position':token.user.position})
         
 class ApprovingManagerView(ListAPIView):
     permission_classes = (IsAuthenticated, )
