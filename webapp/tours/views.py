@@ -5,18 +5,19 @@ from rest_framework.response import Response
 from .models import Tour, Employee
 from .serializers import TourSerializer
 
+
 class TourView(APIView):
-    
+
     def get(self, request):
         user = request.user
-        
+
         if(user.position == "manager"):
             queryset = Tour.objects.filter(approving_manager=user)
         elif(user.position == "finance_manager"):
             queryset = Tour.objects.filter(status="approved")
         else:
             queryset = Tour.objects.filter(created_by=user)
-            
+
         serializer = TourSerializer(queryset, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
 
@@ -29,9 +30,11 @@ class TourView(APIView):
             serializer.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         else:
-            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+            return Response(
+                serializer.errors,
+                status=status.HTTP_400_BAD_REQUEST)
 
-            
+
 class TourDetailView(APIView):
 
     def get(self, request, pk):
@@ -47,7 +50,6 @@ class TourDetailView(APIView):
             serializer.save()
             return Response(serializer.data, status=status.HTTP_200_OK)
         else:
-            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
-
-        
+            return Response(
+                serializer.errors,
+                status=status.HTTP_400_BAD_REQUEST)

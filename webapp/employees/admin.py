@@ -6,4 +6,5 @@ from .models import Employee
 class EmployeeAdmin(admin.ModelAdmin):
     list_display = ('username', 'first_name', 'last_name', 'position', 'email')
 
+
 admin.site.register(Employee, EmployeeAdmin)
