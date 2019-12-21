@@ -15,14 +15,13 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
-from rest_framework.authtoken.views import obtain_auth_token
 
 from tours.views import TourView, TourDetailView
-from employees.views import ApprovingManagerView
+from employees.views import ApprovingManagerView, CustomObtainAuthToken
 
 urlpatterns = [
     path("admin/", admin.site.urls),
-    path("api-token-auth/", obtain_auth_token, name="api_token_auth"),
+    path("api-token-auth/", CustomObtainAuthToken.as_view(), name="api_token_auth"),
     path("tours/", TourView.as_view(), name="tours"),
     path("tours/<int:pk>/", TourDetailView.as_view(), name="tours_details"),
     path("approving_managers/", ApprovingManagerView.as_view(), name="approving_managers")
