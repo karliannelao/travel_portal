@@ -11,6 +11,25 @@ https://docs.djangoproject.com/en/3.0/ref/settings/
 """
 
 import os
+import sys
+
+def env(key, default=None, valuetype=str, required=False, nullable=bool):
+    if required and (key not in os.environ):
+        raise RuntimeError(u"Required environment setting %s not found" % key)
+    if valuetype == bool:
+        # special handling of booleans: must be a valid python expr: True or False
+        raw_val = default
+        if key in os.environ:
+            raw_val = ast.literal_eval(os.environ.get(key))
+    else:
+        raw_val = os.environ.get(key, default)
+    val = valuetype(raw_val)
+    if nullable and (default is None) and (raw_val == default):
+        val = default
+    return val
+
+#TEMPPPP
+WEBAPP_DOMAIN = 'http://127.0.0.1:8000'
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -37,9 +56,10 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'employees',
+    'employees.apps.EmployeesConfig',
     'tours',
-    'rest_framework'
+    'rest_framework',
+    'rest_framework.authtoken',
 ]
 
 AUTH_USER_MODEL = 'employees.Employee'
@@ -103,6 +123,17 @@ AUTH_PASSWORD_VALIDATORS = [
         'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
     },
 ]
+
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        'rest_framework.authentication.BasicAuthentication',
+        'rest_framework.authentication.TokenAuthentication',
+    ),
+    'DEFAULT_PERMISSION_CLASSES': (
+        'rest_framework.permissions.IsAuthenticated',
+    )
+}
+
 
 
 # Internationalization
