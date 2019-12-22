@@ -1,6 +1,7 @@
 from rest_framework import status
 from rest_framework.views import APIView
 from rest_framework.response import Response
+from django.db.models import Q
 
 from .models import Tour, Employee
 from .serializers import TourSerializer
@@ -14,7 +15,7 @@ class TourView(APIView):
         if(user.position == "Manager"):
             queryset = Tour.objects.filter(approving_manager=user)
         elif(user.position == "Finance Manager"):
-            queryset = Tour.objects.filter(status="approved")
+            queryset = Tour.objects.filter(Q(status="Submitted to Finance") | Q(financial_manager__isnull=False))
         else:
             queryset = Tour.objects.filter(created_by=user)
 
