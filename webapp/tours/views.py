@@ -11,9 +11,9 @@ class TourView(APIView):
     def get(self, request):
         user = request.user
 
-        if(user.position == "manager"):
+        if(user.position == "Manager"):
             queryset = Tour.objects.filter(approving_manager=user)
-        elif(user.position == "finance_manager"):
+        elif(user.position == "Finance Manager"):
             queryset = Tour.objects.filter(status="approved")
         else:
             queryset = Tour.objects.filter(created_by=user)
